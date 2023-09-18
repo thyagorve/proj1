@@ -21,9 +21,9 @@ def pintss():
     print('\033[33mSistema desenvolvido por tiago lima  no entuto  de ajudar \nna procura de novos ips e host. Proibida a distribuição \nsem autorização\033[m\n')
     print('｡☆✼★'+ ('━'*10)+'\033[34;1m SELECIONE UMA OPÇAO A BAIXO \033[m'+('━'*10)+ '★✼☆ ｡\n')
 
-    print('\033[31m[\033[m1\033[31m]\033[m ✼  Achar proxy(vivo)')
+    print('\033[31m[\033[m1\033[31m]\033[m ✼  Achar proxy(todas op)')
     print('\033[31m[\033[m2\033[31m]\033[m ✼  Testar ip (vivo)')
-    print('\033[31m[\033[m3\033[31m]\033[m ✼  Testar ssl(vivo,tim,claro)')
+    print('\033[31m[\033[m3\033[31m]\033[m ✼  Testar host ssl(vivo,tim,claro)')
     print('\033[31m[\033[m4\033[31m]\033[m ✼  Encontra Cloudflare(off)')
     print('\033[31m[\033[m5\033[31m]\033[m ✼  Encontrar Dominios')
     print('\033[31m[\033[m6\033[31m]\033[m ✼  Encontrar CDN\n')
