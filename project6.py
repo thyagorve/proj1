@@ -40,29 +40,16 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
 
 
         def testar_conexao_sem_criptografia(host, porta):
-            try:
-                # Cria um objeto socket
+            try:     
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                
-                # Define um timeout de 2 segundos
                 sock.settimeout(1)
-                
-                # Tenta se conectar ao host na porta especificada
                 sock.connect((host, porta))
-                
-                # Se a conexão for bem-sucedida, imprime uma mensagem
-               # print(f"Conexão estabelecida com {host}:{porta} sem criptografia.")
                 print(f"\033[32m- ✅ - {host} ONLINE!!\033[m")
                 with open(output_filename, "a") as arquivo:
                     arquivo.write(host + '\n')
-                
-                # Fecha o socket
                 sock.close()
             except socket.error:
-                # Se ocorrer um erro ao conectar, imprime uma mensagem de falha
-                #print(f"Não foi possível estabelecer uma conexão com {host}:{porta}.")
                 print(f"\033[31m- 🔴 - {host} OFF !!\033[m")
-                #print(f"\033[31m- {host} OFF !!\033[m")
                 pass
         def check_proxy(ip, contado, qtd):
             try:            
@@ -70,7 +57,6 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
             except:
                pass
 
-        # Solicitar os intervalos de IPs ao usuário
         perg = input('Digite dois grupos de 1 IP proxy:\n')
         q = int(input('Intervalo 3° grupo valor menor:\n'))
         d = int(input('Intervalo 3° grupo valor maior:\n'))
@@ -92,7 +78,6 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
                 r = (perg + '.' + str(i) + '.' + str(ii))
                 coma1.append(r)
 
-        # Iniciar threads para verificar proxies
         threads = []
         contado = 0
         qtd = (d - q) * 255
@@ -103,7 +88,6 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
             thread.start()
             threads.append(thread)
 
-        # Aguardar todas as threads terminarem
         for thread in threads:
             thread.join()
 
@@ -113,46 +97,29 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
     if res ==2:
 
 
-
-        # Função para verificar o proxy
         def check_ip(ip, contado, qtds):
             try:
-                # Define a porta para o teste (por exemplo, 80 para HTTP)
                 porta = 443
                 testar_conexao_sem_criptografia(ip, porta)
-               # print(f"\033[32m- ✅ - {ip} ONLINE!!\033[m")
+
                                      
             except:
-               # print(f"\033[31m- 🔴 - {ip} OFF !!\033[m")
                pass
 
-        # Função para testar a conexão sem criptografia
+
         def testar_conexao_sem_criptografia(host, porta):
             try:
-                # Cria um objeto socket
+
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                
-                # Define um timeout de 2 segundos
                 sock.settimeout(1)
-                
-                # Tenta se conectar ao host na porta especificada
                 sock.connect((host, porta))
-                
-                # Se a conexão for bem-sucedida, imprime uma mensagem
-                #print(f"Conexão estabelecida com {host}:{porta} sem criptografia.")
                 print(f"\033[32m- ✅ - {host} ONLINE!!\033[m")
                 with open(output_filename, "a") as arquivo:
                     arquivo.write(host + '\n')
-                
-                # Fecha o socket
                 sock.close()
             except:
-                # Se ocorrer um erro ao conectar, imprime uma mensagem de falha
-                #pass
-                #raise Exception(f"Não foi possível estabelecer uma conexão com {host}:{porta}.")
                 print(f"\033[31m- 🔴 - {host} OFF !!\033[m")
-
-        # Solicitar a quantidade de IPs ao usuário
+                
         qtd = int(input('Quantos IPs você deseja?: '))
         q = input('Valor inicial: ')
         output_filename = input('Digite o nome do arquivo de saída (ex: proxyativo2.txt): ')
@@ -187,7 +154,6 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
         qtds = len(ips)
         contado = 0
 
-        # Iniciar threads para verificar IPs
         threads = []
 
         for b in ips:
@@ -196,7 +162,6 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
             thread.start()
             threads.append(thread)
 
-        # Aguardar todas as threads terminarem
         for thread in threads:
             thread.join()
 
@@ -291,7 +256,6 @@ def Testarhostssl(): #### Testar ssl(vivo,tim,claro)') ####
             pass
 
 
-        # Adicione aqui o código para agradecimento ou outras ações após a execução.
 
     if __name__ == "__main__":
         input_filename = input('Digite o nome do arquivo de entrada (exemplo: hostteste.txt): ')
@@ -303,7 +267,6 @@ def Testarhostssl(): #### Testar ssl(vivo,tim,claro)') ####
     
    # agradecimento()          
 def Encontracdn(): #### Encontrar CDN\n') ####
-    # Pergunta ao usuário se o arquivo está em um arquivo de texto
     opcao = input("Seu arquivo está em um arquivo de texto? (Digite 1 para sim, 2 para não): ")
 
     if opcao == "1":
@@ -365,10 +328,8 @@ def buscahostedominio():
                     
                 if (response.status_code == 200):
                         for ii in rrr['domains']:
-                            #hostt.append= ii['domain']:
                             ip = socket.gethostbyname(ii['domain'])
         
-              #print ("- host executadas", iii, end='\r')
               
                             url = ("https://rdap.arin.net/registry/ip/"+ip)
         
@@ -376,15 +337,13 @@ def buscahostedominio():
         
                             rr= response.json()
               
-            #  nomedabagaca=(rr['name'])
             
                             if (rr['name'])=="CLOUDFLARENET":
                                
                                  with open("ativo-clodflare.txt", "a") as arquivo:
                                     arquivo.write(ii['domain']+'\n')
                             if (rr['name'])=="AMAZO-CF":
-                   # print ("FRONT",C, end='\r')
-                    #print(f'{nomedabagaca} - {iii} - {ip}')
+
                                    with open("ativo-front.txt", "a") as arquivo:
                                         arquivo.write( ii['domain']+'\n')
                             if (rr['name'])=="GOOGLE":
