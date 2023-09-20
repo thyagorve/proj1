@@ -6,6 +6,9 @@ import random
 import requests
 import threading
 import concurrent.futures
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from colorama import init, Fore, Style
+import time
 
 
 
@@ -17,12 +20,12 @@ coma2=[]
 #menu
 def pintss():
     os.system('clear')
-    print('｡☆✼★'+ ('━'*15)+'\033[34;1m TIAGO LIMA SILVA \033[m'+('━'*15)+'★✼☆ ｡\n')
-    print('\033[33mSistema desenvolvido por tiago lima  no entuto  de ajudar \nna procura de novos ips e host. Proibida a distribuição \nsem autorização\033[m\n')
+    print('｡☆✼★'+ ('━'*15)+'\033[34;1m SilvaSys Innovations \033[m'+('━'*15)+'★✼☆ ｡\n')
+    print('\033[33mSistema desenvolvido por @Tiguinho  no entuto  de ajudar \nna procura de novos ips e host. Proibida a distribuição \nsem autorização\033[m\n')
     print('｡☆✼★'+ ('━'*10)+'\033[34;1m SELECIONE UMA OPÇAO A BAIXO \033[m'+('━'*10)+ '★✼☆ ｡\n')
 
-    print('\033[31m[\033[m1\033[31m]\033[m ✼  Achar proxy(todas op)')
-    print('\033[31m[\033[m2\033[31m]\033[m ✼  Testar ip (vivo)')
+    print('\033[31m[\033[m1\033[31m]\033[m ✼  Achar proxy(tim e vivo)')
+    print('\033[31m[\033[m2\033[31m]\033[m ✼  Testar ip payloard(vivo)')
     print('\033[31m[\033[m3\033[31m]\033[m ✼  Testar host ssl(vivo,tim,claro)')
     print('\033[31m[\033[m4\033[31m]\033[m ✼  Encontra Cloudflare(off)')
     print('\033[31m[\033[m5\033[31m]\033[m ✼  Encontrar Dominios')
@@ -170,37 +173,132 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
 
 
     agradecimento()  
-def Testarhostproxydirect(): ###### Testar ip (vivo)') ########
-  try:
-    with open("proxy.txt", "r") as tf:
-        coma2 = tf.read().split('\n')
+def Testarhostproxydirect(): ###### Testar ip (vivo paylord)') ########
 
-    with open("proxy.txt", "r") as file:
-        Counter = 0
-        Content = file.read() 
-        CoList = Content.split("\n") 
-        for i in CoList: 
-            if i: 
-                Counter += 1
+    init(autoreset=True)
 
-    contado=0
-    with open(os.devnull, "wb" ) as limbo:
-              for b in coma2:
-                  contado=contado+1
-                  try:
-                            result=subprocess.Popen(["ping", "-c", "1", "-n","-w","5", b],
-                                  stdout=limbo, stderr=limbo).wait( timeout=0.1)
-                            if result:
-                                  print(f"\033[31m - {contado} de {Counter} - " + b )
-                            else:
-                                  print(f"\033[32m- {contado}  de {Counter} -" + b )
-                                  with open("proxytestados.txt", "a") as arquivo:
-                                          arquivo.write('\n' +b)                                             
-                  except:
-                          print(f"\033[31m- {contado} de {Counter} - " + b )
-    agradecimento()
-  except FileNotFoundError:
-    print('\033[31mnão encontrado o arquivo proxy.txt\033[m')
+    print_lock = threading.Lock()
+    positive_proxies = []
+
+    def check_proxy(proxy_host, cloudfront_request):
+        try:
+            # Establish a connection to the HTTP proxy
+            proxy_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            proxy_socket.settimeout(0.5)  # 0.5-second timeout
+            proxy_socket.connect((proxy_host, 80))  # Attempt to connect to the proxy
+
+            # Send the GET request with the CLOUDFRONT value
+            proxy_socket.send(cloudfront_request.encode())
+
+            # Receive the proxy's response
+            response = proxy_socket.recv(4096)
+
+            # Collect the HTTP status code
+            status_code = response.split(b' ')[1]
+
+            # Define the color and message based on the status_code
+            if status_code == b'200':
+                color = Fore.YELLOW
+                message = "Passou perto"
+            elif status_code in [b'101', b'403']:
+                color = Fore.GREEN
+                message = "ONLINE"
+                positive_proxies.append(proxy_host)
+            else:
+                color = Fore.RED
+                message = "OFFLINE"
+
+            # Lock access to print to ensure proper display
+            with print_lock:
+                # Display proxy execution with the appropriate color and message
+                print(f"{color}- {message} Status: {status_code.decode()} --> {proxy_host} ")
+
+            # Close the connection to the proxy
+            proxy_socket.close()
+
+        except Exception as e:
+            # Lock access to print to ensure proper display
+            with print_lock:
+                # Display proxy execution in red (error)
+                print(f"{Fore.RED}- OFFLINE {proxy_host}")
+
+    def generate_ip_list():
+        perg = input('Digite dois grupos de 1 IP proxy:\n')
+        q = int(input('Intervalo do 3° grupo - valor menor:\n'))
+        d = int(input('Intervalo do 3° grupo - valor maior:\n'))
+
+        if perg == "":
+            perg = "255"
+        else:
+            perg = perg
+
+        if q > d:
+            q = int(input('Valor menor: '))
+            d = int(input('Valor maior: '))
+
+        ip_list = []
+        for i in range(q, d + 1):
+            for ii in range(1, 256):
+                r = (perg + '.' + str(i) + '.' + str(ii))
+                ip_list.append(r)
+
+        with open("hosts.txt", "w") as file:
+            for ip in ip_list:
+                file.write(ip + "\n")
+
+    def main():
+        print(f"{Fore.GREEN}{Style.BRIGHT}Pressione Enter quando estiver no dados móveis...{Style.RESET_ALL}")
+        input("")
+
+        # Generate the IP list
+        generate_ip_list()
+        
+        cloudfront_host = input("informe a cdn ou deixe vazil para usar essa (d2ph342hr11u2x.cloudfront.net): ")
+        noma=input("informe o nome de saida (ex: proxy_ativo.txt): ")
+        
+        if cloudfront_host=="":
+            cloudfront_host = "d2ph342hr11u2x.cloudfront.net"
+        else:
+            cloudfront_host=cloudfront_host
+
+        # Read hosts from the generated file
+        with open("hosts.txt", "r") as file:
+            hosts = file.read().splitlines()
+
+        # Define the HTTP request to send to the CloudFront host
+        cloudfront_request = f"GET / HTTP/1.1\r\nHost: {cloudfront_host}\r\nConnection: Upgrade\r\nUpgrade: Websocket\r\n\r\n"
+
+        # Use ThreadPoolExecutor to concurrently check each proxy server's status
+        start_time = time.time()
+        with ThreadPoolExecutor() as executor:
+            futures = []
+            
+            for proxy_host in hosts:
+                futures.append(executor.submit(check_proxy, proxy_host, cloudfront_request))
+
+            # Wait for tasks to complete
+            for future in as_completed(futures):
+                try:
+                    future.result()
+                except Exception as e:
+                    print("Erro durante a execução do teste")
+
+        execution_time = time.time() - start_time
+        print("Tempo:", execution_time)
+
+        # Display the list of positive proxies
+        print("Proxies positivos:")
+        for proxy in positive_proxies:
+            print(proxy)
+
+        # Save positive proxies to a file
+        with open(noma, "w") as positive_file:
+            for proxy in positive_proxies:
+                positive_file.write(proxy + "\n")
+
+    if __name__ == '__main__':
+        main()
+
     agradecimento()
 def Testarhostssl(): #### Testar ssl(vivo,tim,claro)') ####
 
