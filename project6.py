@@ -21,7 +21,7 @@ coma2=[]
 #menu
 def pintss():
     os.system('clear')
-    print('｡☆✼★'+ ('━'*15)+'\033[34;1m SilvaSys Innovations 08/10/2022 \033[m'+('━'*15)+'★✼☆ ｡\n')
+    print('｡☆✼★'+ ('━'*15)+'\033[34;1m SilvaSys Innovations 06/11/2022 \033[m'+('━'*15)+'★✼☆ ｡\n')
     print('\033[33mSistema desenvolvido por @Tiguinho  no entuto  de ajudar \nna procura de novos ips e host. Proibida a distribuição \nsem autorização\033[m\n')
     print('｡☆✼★'+ ('━'*10)+'\033[34;1m SELECIONE UMA OPÇAO A BAIXO \033[m'+('━'*10)+ '★✼☆ ｡\n')
 
