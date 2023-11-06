@@ -44,7 +44,7 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
 
 
         def testar_conexao_sem_criptografia(host, porta):
-            try:     
+            try:
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.settimeout(1)
                 sock.connect((host, porta))
@@ -55,11 +55,9 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
             except socket.error:
                 print(f"\033[31m- 🔴 - {host} OFF !!\033[m")
                 pass
-        def check_proxy(ip, contado, qtd):
-            try:            
-               testar_conexao_sem_criptografia(ip, 443)
-            except:
-               pass
+
+        def check_proxy(ip):
+            testar_conexao_sem_criptografia(ip, 443)
 
         perg = input('Digite dois grupos de 1 IP proxy:\n')
         q = int(input('Intervalo 3° grupo valor menor:\n'))
@@ -82,38 +80,27 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
                 r = (perg + '.' + str(i) + '.' + str(ii))
                 coma1.append(r)
 
-        threads = []
-        contado = 0
         qtd = (d - q) * 255
 
-        for b in coma1:
-            contado += 1
-            thread = threading.Thread(target=check_proxy, args=(b, contado, qtd))
-            thread.start()
-            threads.append(thread)
-
-        for thread in threads:
-            thread.join()
+        # Use ThreadPool para limitar o número de threads ativas
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            executor.map(check_proxy, coma1)
 
         print("Verificação de proxies concluída.")
 
  
     if res ==2:
-
-
-        def check_ip(ip, contado, qtds):
+        def check_ip(ip, contado, qtds, tested_ips):
             try:
                 porta = 443
-                testar_conexao_sem_criptografia(ip, porta)
-
-                                     
+                if ip not in tested_ips:
+                    testar_conexao_sem_criptografia(ip, porta)
+                    tested_ips.add(ip)
             except:
-               pass
-
+                pass
 
         def testar_conexao_sem_criptografia(host, porta):
             try:
-
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.settimeout(1)
                 sock.connect((host, porta))
@@ -123,7 +110,7 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
                 sock.close()
             except:
                 print(f"\033[31m- 🔴 - {host} OFF !!\033[m")
-                
+
         qtd = int(input('Quantos IPs você deseja?: '))
         q = input('Valor inicial: ')
         output_filename = input('Digite o nome do arquivo de saída (ex: proxyativo2.txt): ')
@@ -139,15 +126,6 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
             if a == 127:
                 a = random.randint(1, 255)
 
-            if a == 127:
-                a = random.randint(1, 255)
-
-            if a == 127:
-                a = random.randint(1, 255)
-
-            if a == 127:
-                a = random.randint(1, 255)
-
             b = random.randint(1, 255)
             c = random.randint(1, 255)
             d = random.randint(1, 255)
@@ -157,12 +135,13 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
 
         qtds = len(ips)
         contado = 0
+        tested_ips = set()  # Conjunto para rastrear IPs já testados
 
         threads = []
 
         for b in ips:
             contado += 1
-            thread = threading.Thread(target=check_ip, args=(b, contado, qtds))
+            thread = threading.Thread(target=check_ip, args=(b, contado, qtds, tested_ips))
             thread.start()
             threads.append(thread)
 
@@ -170,6 +149,7 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
             thread.join()
 
         print(f"Verificação de IPs concluída. Resultados salvos em '{output_filename}'.")
+
 
 
 
@@ -418,7 +398,8 @@ def menu():
 
     agradecimento() 
     if sc ==5: ### Encontrar Dominios') ####
-        EncontrarDominios()
+        print("ainda em")
+        #EncontrarDominios()
     if sc ==6: #### Encontrar CDN\n') ####
         Encontracdn()
 def buscahostedominio():
