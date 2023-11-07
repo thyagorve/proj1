@@ -21,7 +21,7 @@ coma2=[]
 #menu
 def pintss():
     os.system('clear')
-    print('｡☆✼★'+ ('━'*15)+'\033[34;1m SilvaSys Innovations 06/11/2022 \033[m'+('━'*15)+'★✼☆ ｡\n')
+    print('｡☆✼★'+ ('━'*15)+'\033[34;1m SilvaSys Innovations 07/11/2022 \033[m'+('━'*15)+'★✼☆ ｡\n')
     print('\033[33mSistema desenvolvido por @Tiguinho  no entuto  de ajudar \nna procura de novos ips e host. Proibida a distribuição \nsem autorização\033[m\n')
     print('｡☆✼★'+ ('━'*10)+'\033[34;1m SELECIONE UMA OPÇAO A BAIXO \033[m'+('━'*10)+ '★✼☆ ｡\n')
 
@@ -37,7 +37,8 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
     #print('━'*30)
     print("\n")  
     print('\033[31m[\033[m1\033[31m]\033[m ✼  Aleatorio')
-    print('\033[31m[\033[m2\033[31m]\033[m ✼  Random\n')
+    print('\033[31m[\033[m2\033[31m]\033[m ✼  Random')
+    print('\033[31m[\033[m3\033[31m]\033[m ✼  Aleatorio Ranges\n')
     res = int(input("Selecione um formato de proxy: "))  
  
     if res == 1:
@@ -149,7 +150,59 @@ def achaproxy():  ###### Achar proxy(vivo)')#######
             thread.join()
 
         print(f"Verificação de IPs concluída. Resultados salvos em '{output_filename}'.")
+    if res==3:
+        
+        def testar_conexao_sem_criptografia(host, porta):
+            try:
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.settimeout(1)
+                sock.connect((host, porta))
+                print(f"\033[32m- ✅ - {host} ONLINE!!\033[m")
+                with open(output_filename, "a") as arquivo:
+                    arquivo.write(host + '\n')
+                sock.close()
+            except socket.error:
+                print(f"\033[31m- 🔴 - {host} OFF !!\033[m")
+                pass
 
+        def check_proxy(ip):
+            testar_conexao_sem_criptografia(ip, 443)
+
+        perg = input('Digite um grupos de 1 IP proxy:\n')
+        q = int(input('Intervalo 2° grupo valor menor:\n'))
+        d = int(input('Intervalo 2° grupo valor maior:\n'))
+        output_filename = input('Digite o nome do arquivo de saída (ex: proxyativo2.txt): ')
+
+        if perg == "":
+            perg = "255"
+        else:
+            perg = perg
+
+        if q > d:
+            q = int(input('Valor menor:\n'))
+            d = int(input('Valor maior:\n'))
+
+        coma1 = []
+
+
+        for i in range(q, d):
+            for ii in range(0, 256):
+                for iis in range(0, 256):  
+                    r = (perg + '.' + str(i) + '.' + str(ii)+ '.' + str(iis))
+                    coma1.append(r)        
+                
+                
+                
+                
+                
+
+        qtd = (d - q) * 255
+
+        # Use ThreadPool para limitar o número de threads ativas
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            executor.map(check_proxy, coma1)
+
+        print("Verificação de proxies concluída.")
 
 
 
